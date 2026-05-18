@@ -1,59 +1,59 @@
-# Makefile for TechFix - Device Repair Management System
-# Compatible with g++ and Embarcadero DevC++
+# ============================================================
+# TechFix Makefile
+# Compiler: g++ | Standard: C++11
+# Compatible with Embarcadero DevC++ (MinGW) and Linux/Mac
+# ============================================================
 
-# Compiler
-CXX = g++
-
-# Compiler flags
+CXX      = g++
 CXXFLAGS = -Wall -std=c++11
+TARGET   = TechFix
+HEADERS  = TechFix.h
+SRCS     = main.cpp TechFix.cpp
+OBJS     = main.o TechFix.o
 
-# Target executable
-TARGET = TechFix
+# Detect OS for clean command (Windows uses del, Unix uses rm)
+ifeq ($(OS),Windows_NT)
+    RM = del /Q /F
+    EXE = $(TARGET).exe
+else
+    RM = rm -f
+    EXE = $(TARGET)
+endif
 
-# Source files
-SOURCES = main.cpp TechFix.cpp
-
-# Object files
-OBJECTS = main.o TechFix.o
-
-# Header files
-HEADERS = TechFix.h
-
-# Default target
+# ── Default: build the executable ───────────────────────────
 all: $(TARGET)
 
-# Link object files to create executable
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+# ── Link ────────────────────────────────────────────────────
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 	@echo "Build successful! Run with: ./$(TARGET)"
 
-# Compile main.cpp
+# ── Compile each .cpp ────────────────────────────────────────
 main.o: main.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -c main.cpp
 
-# Compile TechFix.cpp
 TechFix.o: TechFix.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -c TechFix.cpp
 
-# Clean build files
+# ── Clean build artifacts ────────────────────────────────────
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	$(RM) $(OBJS) $(EXE)
 	@echo "Clean successful!"
 
-# Run the program
+# ── Run the program ──────────────────────────────────────────
 run: $(TARGET)
 	./$(TARGET)
 
-# Rebuild (clean and build)
+# ── Rebuild from scratch ─────────────────────────────────────
 rebuild: clean all
 
-# Help
+# ── Help ─────────────────────────────────────────────────────
 help:
 	@echo "TechFix Makefile Commands:"
-	@echo "  make         - Build the project"
-	@echo "  make run     - Build and run the project"
-	@echo "  make clean   - Remove build files"
-	@echo "  make rebuild - Clean and rebuild"
-	@echo "  make help    - Show this help message"
+	@echo "  make         - Build the project"
+	@echo "  make run     - Build and run the project"
+	@echo "  make clean   - Remove build files"
+	@echo "  make rebuild - Clean and rebuild"
+	@echo "  make help    - Show this help message"
 
 .PHONY: all clean run rebuild help
